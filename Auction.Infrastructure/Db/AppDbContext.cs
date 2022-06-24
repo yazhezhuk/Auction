@@ -8,6 +8,7 @@ public class AppDbContext : IdentityDbContext<AuctionUser>
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
+        Database.EnsureCreated();
     }
     
     public DbSet<Lot> Lots { get; set; }

@@ -7,18 +7,18 @@ public class LotBet : BaseIntEntity
 {
     public LotBet(string userId, int lotId, decimal betAmount)
     {
-        AuctionUserId = Guard.Against.NullOrEmpty(userId);
+        UserId = Guard.Against.NullOrEmpty(userId);
         LotId = Guard.Against.Negative(lotId);
         BetAmount = Guard.Against.NegativeOrZero(betAmount);
         BetTime = DateTime.Now;
     }
     
-    public string AuctionUserId { get; set; }
+    public string UserId { get; set; }
     public AuctionUser? User { get; }
     
     public int LotId { get; set; }
     public Lot? Lot { get; }
 
     public decimal BetAmount { get; set; }
-    public SqlDateTime BetTime { get; set; }
+    public DateTime BetTime { get; set; }
 }
