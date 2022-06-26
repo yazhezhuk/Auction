@@ -5,6 +5,7 @@ using Ardalis.GuardClauses;
 using Auction.Core.Entities;
 using Auction.Core.Interfaces;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
@@ -51,7 +52,7 @@ public class AuthService : IAuthService
         return user;
     }
 
-    public async Task SignIn(string email, string password, string firstname, string surname)
+    public async Task<AuctionUser> SignIn(string email, string password, string firstname, string surname)
     {
         _logger.LogInformation("Trying to register new user");
         var existingUserModel = await _userManager.FindByEmailAsync(email);
@@ -71,6 +72,7 @@ public class AuthService : IAuthService
                 throw new ArgumentException("Error registering user.Please, try again.");
             await _userManager.AddToRolesAsync(user, new[] {"User"});
             _logger.LogInformation("User successfully registered");
+            return user;
         }
 
         _logger.LogInformation("Found user with this credentials.Throwing exception.");

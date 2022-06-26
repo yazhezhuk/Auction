@@ -19,18 +19,23 @@ public class AuthController : ControllerBase
         _authService = authService;
         _logger = logger;
     }
-
+    
+    [AllowAnonymous]
     [HttpPost("logIn")]
     public async Task<IActionResult> LogIn([FromBody] LogInCredentials loginModel)
     {
         try
         {
             var authorizedUser = await _authService.LogIn(loginModel.Email, loginModel.Password);
-            var token = _authService.GenerateJwtToken(authorizedUser);
+            var token = await _authService.GenerateJwtToken(authorizedUser);
             
             _logger.LogInformation($"Log in success with token: {token}");
             
-            return Ok(token);
+            return Ok(new
+            {
+                Token = token,
+                User = authorizedUser
+            });
         }
         catch (ArgumentException e)
         {
@@ -46,7 +51,7 @@ public class AuthController : ControllerBase
     {
         try
         {
-            _authService.SignIn(registerModel.Email
+            await _authService.SignIn(registerModel.Email
                 ,registerModel.Password,
                 registerModel.Surname,
                 registerModel.FirstName);

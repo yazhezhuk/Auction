@@ -1,4 +1,6 @@
 ﻿using Auction.Core.Entities;
+using Auction.Infrastructure.Db.Initializer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,7 +10,7 @@ public class AppDbContext : IdentityDbContext<AuctionUser>
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
-        Database.EnsureCreated();
+        DefaultDbInitializer.Initialize(this);
     }
     
     public DbSet<Lot> Lots { get; set; }

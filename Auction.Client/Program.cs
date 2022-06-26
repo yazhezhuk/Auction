@@ -1,13 +1,10 @@
 using System.Text;
 using Auction.Client.Services;
 using Auction.Core.Entities;
-using Auction.Core.Interfaces;
-using Auction.Infrastructure;
 using Auction.Infrastructure.Db;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -86,10 +83,6 @@ builder.Services.AddAuthorization(options =>
 });
 builder.Services.AddScoped<AuthService>();
 
-builder.Services.AddSpaStaticFiles(configuration =>
-{
-    configuration.RootPath = "ClientApp/build";
-});
 
 var app = builder.Build();
 app.UseCors("AllowAllOrigins");
@@ -101,9 +94,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseSpaStaticFiles(new StaticFileOptions { RequestPath = "/ClientApp/build" });
 
-app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthorization();
 
@@ -115,14 +106,4 @@ app.UseEndpoints(endpoints =>
 });
 
 app.UseAuthentication();
-
-app.UseSpa(spa =>
-{
-    spa.Options.SourcePath = "ClientApp";
-    if (app.Environment.IsDevelopment())
-    {
-        spa.UseReactDevelopmentServer(npmScript: "start");
-    }
-});
-
 app.Run();

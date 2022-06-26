@@ -37,13 +37,21 @@ export abstract class AuthService {
     public static async logIn(email: string, password : string): Promise<boolean> {
         if (this.getToken() === null) {
             logger.log("Trying to log in");
-            await fetch(this.basePath + "/login/", {
+            await fetch(this.basePath + "logIn/", {
                 method: "POST",
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({email, password})
             }).then(async res => {
-                console.log("Request complete! response:", res);
-                localStorage.setItem("Token", JSON.parse(await res.json()));
+                console.log("Request complete! :", res);
+                const responseJson = await res.json();
+                const token = responseJson.token;
+                const user = responseJson.user;
+
+                console.log("Response token: " + token);
+                console.log("Response user: " + user);
+
+                localStorage.setItem("Token", token);
+                localStorage.setItem("User", user);
                 return true;
             }).catch(e => {
                 console.log(e);
